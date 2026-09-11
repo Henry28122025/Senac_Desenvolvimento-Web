@@ -9,14 +9,12 @@ app.use(express.json());
 
 // ==================== CONEXÃO COM O BANCO DE DADOS ====================
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    port: obterPorta(process.env.DB_PORT, 3306),
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD ?? 'admin',
-    database: process.env.DB_NAME || 'sistema_cursos',
-    waitForConnections: true,
-    connectionLimit: 10,
-    dateStrings: true
+   host: "localhost" ,
+   user: "root",
+   password: "admin",
+   database: "sistema_cursos",
+   waitForConnections: true,
+   connectionLimit: 10
 });
 
 async function testarConexao() {
