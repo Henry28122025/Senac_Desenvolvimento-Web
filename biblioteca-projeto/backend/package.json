@@ -1,0 +1,21 @@
+{
+  "name": "biblioteca-backend",
+  "version": "1.0.0",
+  "description": "Backend do projeto biblioteca.",
+  "main": "routes/script.js",
+  "type": "module",
+  "scripts": {
+    "start": "node routes/script.js",
+    "dev": "node --watch routes/script.js",
+    "debug": "node --inspect routes/script.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1",
+    "mysql2": "^3.24.4"
+  }
+}
