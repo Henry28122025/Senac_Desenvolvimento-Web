@@ -2,12 +2,12 @@
   "name": "biblioteca-backend",
   "version": "1.0.0",
   "description": "Backend do projeto biblioteca.",
-  "main": "routes/script.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node routes/script.js",
-    "dev": "node --watch routes/script.js",
-    "debug": "node --inspect routes/script.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "debug": "node --inspect server.js"
   },
   "keywords": [],
   "author": "",

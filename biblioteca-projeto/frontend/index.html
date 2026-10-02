@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <h1>Biblioteca</h1>
+        <button id="BtnBuscar" type="button">Buscar Livros</button>
+        <p id="mensagem"></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Ano</th>
+                    </tr>
+                </thead>
+                <tbody id="listarLivros"></tbody>
+            </table>
+            <section>
+                <h2>Cadastrar Livro</h2>
+                <form id="formCadastrarLivro">
+                    <input type="text" id="titulo" placeholder="Título" required>
+                    <input type="text" id="autor" placeholder="Autor" required>
+                    <input type="number" id="ano" placeholder="Ano" required>
+                    <button type="submit">Cadastrar</button>
+                </form>
+            </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
+ 

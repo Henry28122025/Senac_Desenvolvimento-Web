@@ -12,16 +12,16 @@ const pool = mysql.createPool({
 });
 
 async function testarConexao() {
+    let conexaoTeste;
     try {
-        const conexaoTeste = await pool.getConnection();
-        conexaoTeste.release();
+        conexaoTeste = await pool.getConnection();
         console.log('Conexão com o Banco bem-sucedida!');
     } catch (error) {
         console.error('Erro ao conectar ao Banco de Dados:', error.message);
-        process.exit(1);
+        throw error;
     }finally{
-        if(conexao){
-            conexao.release();
+        if(conexaoTeste){
+            conexaoTeste.release();
         }
     }
 }
