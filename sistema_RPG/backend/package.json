@@ -1,0 +1,21 @@
+{
+  "name": "joelho-de-grilo-backend",
+  "version": "1.0.0",
+  "description": "API da comunidade RPG Joelho de Grilo: mural, eventos, produtos e pedidos demonstrativos.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "db:setup": "node database/prepararBanco.js",
+    "admin": "node database/administrador.js",
+    "test": "node --test tests/integracao.test.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.3",
+    "express": "^5.2.1",
+    "mysql2": "^3.24.4"
+  }
+}

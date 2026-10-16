@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Um ponto de encontro para aventureiros. Conheça a Taverna Joelho de Grilo, encontre sua próxima mesa e explore a loja demonstrativa.">
+  <meta name="theme-color" content="#0a111b">
+  <title>Joelho de Grilo | Sua próxima aventura</title>
+  <link rel="icon" href="assets/d20.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="assets/taverna-noturna.png">
+  <link rel="stylesheet" href="style.css">
+  <script src="admin.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <header class="header">
+    <a href="#inicio" class="brand" aria-label="Joelho de Grilo, início">
+      <img src="assets/d20.svg" alt="" width="42" height="42">
+      <span>JOELHO DE GRILO<small>TAVERNA & COMUNIDADE</small></span>
+    </a>
+    <nav aria-label="Navegação principal" class="nav">
+      <a href="#inicio" data-view="inicio">A taverna</a>
+      <a href="#mural" data-view="mural">Comunidade</a>
+      <a href="#eventos" data-view="eventos">Eventos</a>
+      <a href="#loja" data-view="loja">Loja</a>
+    </nav>
+    <div class="header-actions">
+      <a href="#gestao" class="admin-header-link" data-action="manage" data-kind="resumo" data-admin-only hidden>Painel da taverna</a>
+      <button class="cart-button" id="open-cart" aria-label="Abrir carrinho">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 3h2l3 12h11l2-8H6M9 20h.01M18 20h.01" stroke-linecap="round"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg>
+        <span id="cart-count">0</span>
+      </button>
+      <a href="#entrar" class="button small outline" id="account-link">Entrar <span aria-hidden="true">↗</span></a>
+      <button class="text-button" id="logout-button" hidden>Sair</button>
+    </div>
+  </header>
+
+  <main id="conteudo" tabindex="-1">
+    <section class="view" id="view-inicio" aria-label="A taverna">
+      <div class="hero">
+        <div class="hero-art" aria-hidden="true"></div>
+        <div class="mist" aria-hidden="true"></div>
+        <div class="particles" aria-hidden="true"></div>
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="tiny-line"></span> SUA MESA ESTÁ ESPERANDO</p>
+          <h1>Conectando<br><span>aventureiros.</span></h1>
+          <p class="hero-description">Dos primeiros dados às grandes histórias.<br>Encontre sua comunidade na Joelho de Grilo.</p>
+          <div class="hero-actions">
+            <a href="#cadastro" class="button primary">Começar minha aventura <span aria-hidden="true">→</span></a>
+            <a href="#entrar" class="button outline">Já faço parte</a>
+          </div>
+          <div class="hero-features">
+            <div><span class="feature-number">01</span><strong>Encontre sua mesa</strong><p>Gente que fala a sua língua.</p></div>
+            <div><span class="feature-number">02</span><strong>Viva novas histórias</strong><p>Encontros, jogos e aventuras.</p></div>
+            <div><span class="feature-number">03</span><strong>Equipe-se</strong><p>Seu próximo item favorito.</p></div>
+          </div>
+        </div>
+        <div class="hero-bottom"><span>SANTA CRUZ DO SUL · RS</span><a href="#sobre">Conheça a taverna <span aria-hidden="true">↓</span></a><span>RPG · BOARD GAMES · CARD GAMES</span></div>
+      </div>
+      <section class="about content-width" id="sobre">
+        <div><p class="eyebrow">BEM-VINDO À JOELHO DE GRILO</p><h2>Toda boa história<br>começa numa <em>taverna.</em></h2></div>
+        <div class="about-copy"><p id="community-description">RPG, jogos de tabuleiro e card games. A Taverna Joelho de Grilo é um ponto de encontro para quem gosta de jogar e compartilhar histórias, no centro de Santa Cruz do Sul.</p><p>Este espaço digital aproxima a comunidade: encontre jogadores, conheça a agenda e descubra itens para levar à sua próxima aventura.</p><a href="#mural" class="inline-link">Conhecer a comunidade <span aria-hidden="true">↗</span></a></div>
+        <div class="visit"><span class="visit-icon" aria-hidden="true">⌖</span><div><strong>Venha para a mesa</strong><p id="community-address">Rua São José, 2313 · Santa Cruz do Sul, RS</p></div><div><strong>Portas abertas</strong><p id="community-hours">Terça a domingo · 14h às 22h</p></div><a href="https://linktr.ee/JOELHODEGRILO" target="_blank" rel="noopener noreferrer" class="inline-link">Encontre a taverna ↗</a></div>
+      </section>
+      <section class="explore content-width" aria-label="Explore a comunidade">
+        <a href="#mural" class="explore-link"><span class="eyebrow">A COMUNIDADE</span><h3>Há histórias<br>para compartilhar.</h3><p>Encontre jogadores e sua próxima campanha.</p><span class="circle-arrow" aria-hidden="true">↗</span></a>
+        <a href="#eventos" class="explore-link"><span class="eyebrow">A PRÓXIMA MESA</span><h3>Um encontro.<br>Infinitas aventuras.</h3><p>Explore eventos e reserve seu lugar.</p><span class="circle-arrow" aria-hidden="true">↗</span></a>
+        <a href="#loja" class="explore-link"><span class="eyebrow">A LOJA DA TAVERNA</span><h3>Todo herói tem<br>seu equipamento.</h3><p>Conheça o catálogo demonstrativo.</p><span class="circle-arrow" aria-hidden="true">↗</span></a>
+      </section>
+    </section>
+
+    <section class="view page content-width" id="view-mural" hidden aria-labelledby="mural-title">
+      <div class="page-heading"><div><p class="eyebrow">HISTÓRIAS AO REDOR DA MESA</p><h1 id="mural-title">O mural da <em>taverna.</em></h1><p>Encontre sua próxima mesa ou conte como foi a última.</p></div><span class="section-symbol" aria-hidden="true">✧</span></div>
+      <div class="community-layout">
+        <div>
+          <form id="post-form" class="panel composer">
+            <div class="composer-heading"><span class="avatar" id="composer-avatar">JG</span><div><strong id="composer-name">Qual é a sua história?</strong><p>Uma boa conversa pode virar uma campanha.</p></div></div>
+            <label for="post-content" class="sr-only">Sua publicação</label><textarea id="post-content" name="conteudo" rows="4" minlength="3" maxlength="1500" placeholder="Procurando uma mesa? Compartilhando uma aventura?" required></textarea>
+            <div class="composer-bottom"><label><span class="sr-only">Categoria</span><select name="categoria" aria-label="Categoria da publicação"><option>Conversa</option><option>Procuro mesa</option><option>Relato de aventura</option></select></label><button class="button primary small" type="submit">Publicar <span aria-hidden="true">↑</span></button></div>
+            <p class="form-feedback" role="status"></p>
+          </form>
+          <div class="list-toolbar"><strong>Vozes da comunidade</strong><label class="search-field"><span aria-hidden="true">⌕</span><input id="post-search" type="search" placeholder="Buscar no mural" aria-label="Buscar publicações"></label></div>
+          <div id="posts-list" class="posts-list" aria-live="polite"></div>
+        </div>
+        <aside class="community-aside"><div class="panel"><p class="eyebrow">UM LUGAR PARA TODOS</p><h3>Sente-se.<br>Os dados são seus.</h3><p>Iniciante ou mestre de longa data: toda aventura merece uma mesa.</p><hr><strong>O combinado da taverna</strong><ul><li>Respeite quem está à mesa.</li><li>Receba bem novos jogadores.</li><li>Compartilhe histórias, sem spoilers.</li></ul><a href="#eventos" class="inline-link">Encontre um evento ↗</a></div><p class="demo-note">Protótipo acadêmico. As publicações iniciais são exemplos fictícios.</p></aside>
+      </div>
+    </section>
+
+    <section class="view page content-width" id="view-eventos" hidden aria-labelledby="eventos-title">
+      <div class="page-heading"><div><p class="eyebrow">MARQUE NO SEU PERGAMINHO</p><h1 id="eventos-title">A próxima <em>aventura.</em></h1><p>Encontre seu jogo, reúna a companhia e reserve seu lugar.</p></div><button class="button outline small" data-action="manage" data-kind="eventos" data-admin-only hidden>Gerenciar agenda ↗</button></div>
+      <div class="filters"><label class="search-field"><span aria-hidden="true">⌕</span><input id="event-search" type="search" placeholder="Buscar evento" aria-label="Buscar eventos"></label><label><span class="sr-only">Tipo de evento</span><select id="event-category" aria-label="Filtrar por tipo de evento"><option value="">Todos os jogos</option><option>RPG</option><option>Board game</option><option>Card game</option></select></label></div>
+      <p class="demo-note">Agenda de demonstração. Estes eventos são exemplos e não são anúncios reais da taverna.</p>
+      <div id="events-list" class="events-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="view page content-width" id="view-loja" hidden aria-labelledby="loja-title">
+      <div class="page-heading"><div><p class="eyebrow">ANTES DE PARTIR, EQUIPE-SE</p><h1 id="loja-title">Tesouros da <em>taverna.</em></h1><p>Pequenos itens. Grandes possibilidades de aventura.</p></div><button class="button outline small" data-action="manage" data-kind="produtos" data-admin-only hidden>Gerenciar catálogo ↗</button></div>
+      <div class="filters"><label class="search-field"><span aria-hidden="true">⌕</span><input id="product-search" type="search" placeholder="O que você procura?" aria-label="Buscar produtos"></label><div class="filter-chips" id="product-filters" role="group" aria-label="Categoria de produto"><button class="chip active" data-category="">Tudo</button><button class="chip" data-category="Dados">Dados</button><button class="chip" data-category="Livros">Livros</button><button class="chip" data-category="Acessórios">Acessórios</button><button class="chip" data-category="Card games">Card games</button></div></div>
+      <p class="demo-note">Catálogo e preços ilustrativos. Os pedidos desta versão são demonstrativos, sem cobrança real.</p>
+      <div id="products-list" class="products-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="view page content-width" id="view-gestao" hidden aria-labelledby="gestao-title">
+      <div class="admin-hero"><div><p class="eyebrow">BASTIDORES DA AVENTURA</p><h1 id="gestao-title">Cuide da sua <em>taverna.</em></h1><p>Da próxima mesa ao próximo tesouro. Tudo em um só lugar.</p></div><div class="admin-hero-seal"><img src="assets/d20.svg" width="64" height="64" alt=""><span>ÁREA DA EQUIPE</span></div></div>
+      <div class="admin-layout">
+        <aside class="admin-sidebar panel"><p class="eyebrow">SALA DO MESTRE</p><nav aria-label="Administração da taverna">
+          <button class="admin-tab" data-action="manage" data-kind="resumo"><span aria-hidden="true">⌘</span>Visão geral</button>
+          <button class="admin-tab" data-action="manage" data-kind="produtos"><span aria-hidden="true">◇</span>Produtos</button>
+          <button class="admin-tab" data-action="manage" data-kind="eventos"><span aria-hidden="true">◷</span>Eventos</button>
+          <button class="admin-tab" data-action="manage" data-kind="membros"><span aria-hidden="true">♙</span>Pessoas & equipe</button>
+          <button class="admin-tab" data-action="manage" data-kind="publicacoes"><span aria-hidden="true">≋</span>Mural</button>
+          <button class="admin-tab" data-action="manage" data-kind="pedidos"><span aria-hidden="true">▤</span>Pedidos</button>
+          <button class="admin-tab" data-action="manage" data-kind="comunidade"><span aria-hidden="true">✧</span>A comunidade</button>
+        </nav><div class="admin-sidebar-note"><span class="tag">ADMINISTRADOR</span><p>Você prepara o cenário.<br>A comunidade vive a história.</p><a href="#inicio" class="inline-link">Ver o site ↗</a></div></aside>
+        <div class="admin-workspace" id="admin-workspace">
+          <div class="admin-section-heading"><div><p class="eyebrow" id="admin-section-eyebrow">O PULSO DA COMUNIDADE</p><h2 id="admin-section-title">Visão geral</h2></div><button class="button primary small" id="new-record">+ Novo produto</button></div>
+          <p id="manage-feedback" class="form-feedback" role="status"></p><div id="admin-overview"></div>
+          <div id="admin-table-area" hidden><label class="search-field admin-search"><span aria-hidden="true">⌕</span><input id="manage-search" type="search" placeholder="Buscar registros" aria-label="Buscar registros"></label><div class="table-wrap panel"><table><caption class="sr-only" id="manage-caption">Registros cadastrados</caption><thead id="manage-head"></thead><tbody id="manage-body"></tbody></table></div></div>
+          <form id="community-form" class="panel community-editor" hidden><div class="community-editor-intro"><p class="eyebrow">AS PORTAS ESTÃO ABERTAS</p><h3>Apresente sua comunidade.</h3><p>Os textos e contatos salvos aqui aparecem na página da taverna.</p></div><label>Nome da comunidade<input name="nome" minlength="2" maxlength="80" required></label><label>Apresentação<textarea name="descricao" minlength="10" maxlength="1800" rows="6" required></textarea></label><label>Endereço<input name="endereco" minlength="3" maxlength="200" required></label><label>Horário de funcionamento<input name="horario" minlength="3" maxlength="150" required></label><label>Link das redes<input name="link_redes" type="url" maxlength="500" placeholder="https://…" required></label><p class="form-feedback" role="status"></p><button class="button primary small" type="submit">Publicar alterações →</button></form>
+        </div>
+      </div>
+    </section>
+
+    <section class="view page content-width" id="view-perfil" hidden aria-labelledby="perfil-title">
+      <div class="page-heading"><div><p class="eyebrow">SUA HISTÓRIA NA COMUNIDADE</p><h1 id="perfil-title">Ficha do <em>aventureiro.</em></h1><p>Um nome à mesa. Muitas histórias pela frente.</p></div><a class="button outline small" href="#mural">Ir para o mural ↗</a></div>
+      <p id="profile-feedback" class="form-feedback" role="status"></p>
+      <div id="profile-content" hidden>
+        <div class="profile-layout">
+          <aside class="profile-card panel"><span class="avatar profile-avatar" id="profile-avatar">JG</span><span class="tag" id="profile-role">MEMBRO DA TAVERNA</span><h2 id="profile-name"></h2><p id="profile-bio"></p><span class="profile-system" id="profile-system"></span><div class="profile-stats"><div><strong id="profile-posts">0</strong><span>Publicações</span></div><div><strong id="profile-signups">0</strong><span>Inscrições</span></div><div><strong id="profile-orders">0</strong><span>Pedidos</span></div></div><a href="#pedidos" class="button outline small">Meus pedidos ↗</a><button class="button outline small" data-action="manage" data-kind="produtos" data-admin-only hidden>Gerenciar a taverna ↗</button></aside>
+          <form id="profile-form" class="profile-form panel"><p class="eyebrow">DO SEU JEITO</p><h2>Quem é você na mesa?</h2><p>Atualize como você se apresenta e qual sistema gosta de jogar.</p><label>Nome de aventureiro<input name="nome" id="profile-edit-name" autocomplete="nickname" minlength="2" maxlength="80" required></label><label>E-mail da conta<input id="profile-edit-email" type="email" readonly></label><label>Sistema favorito<select name="sistema_preferido" id="profile-edit-system"><option>Estou começando</option><option>Dungeons &amp; Dragons</option><option>Tormenta20</option><option>Pathfinder</option><option>Ordem Paranormal</option><option>Outros sistemas</option></select></label><label>Um pouco da sua história<textarea name="bio" id="profile-edit-bio" rows="4" maxlength="300" placeholder="Seu estilo de jogo, personagens favoritos ou o que procura em uma mesa…"></textarea></label><div class="profile-form-bottom"><span id="profile-bio-count">0 / 300</span><button type="submit" class="button primary small">Salvar meu perfil →</button></div><p class="form-feedback" role="status"></p></form>
+        </div>
+        <div class="list-toolbar profile-events-heading"><div><p class="eyebrow">SEUS ENCONTROS</p><h2>Mesas com lugar reservado.</h2></div><a href="#eventos" class="inline-link">Explorar a agenda ↗</a></div>
+        <div id="profile-events" class="profile-events" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="view page content-width" id="view-pedidos" hidden aria-labelledby="pedidos-title">
+      <div class="page-heading"><div><p class="eyebrow">NO INVENTÁRIO DO AVENTUREIRO</p><h1 id="pedidos-title">Meus <em>pedidos.</em></h1><p>Acompanhe seus pedidos demonstrativos, sem pagamento real.</p></div><a class="button outline small" href="#loja">Voltar à loja ↗</a></div>
+      <div id="orders-list" class="orders-list" aria-live="polite"></div>
+    </section>
+
+    <section class="view auth-view" id="view-auth" hidden aria-labelledby="auth-title">
+      <div class="auth-art" aria-hidden="true"></div><div class="particles" aria-hidden="true"></div>
+      <div class="auth-card panel"><a href="#inicio" class="back-link">← Voltar à taverna</a><img class="auth-sigil" src="assets/d20.svg" width="52" height="52" alt=""><p class="eyebrow" id="auth-eyebrow">SUA HISTÓRIA CONTINUA</p><h1 id="auth-title">Bem-vindo de volta.</h1><p id="auth-description">A companhia está esperando por você.</p>
+        <form id="auth-form">
+          <label id="auth-name-label" hidden>Nome de aventureiro<input id="auth-name" name="nome" autocomplete="nickname" minlength="2" maxlength="80" placeholder="Como a mesa vai chamar você?"></label>
+          <label>E-mail<input id="auth-email" name="email" type="email" autocomplete="email" maxlength="150" placeholder="voce@exemplo.com" required></label>
+          <label>Senha<input id="auth-password" name="senha" type="password" autocomplete="current-password" minlength="8" maxlength="128" placeholder="Pelo menos 8 caracteres" required></label>
+          <label class="checkbox-label"><input type="checkbox" id="show-password">Mostrar senha</label>
+          <button class="button primary" id="auth-submit" type="submit">Entrar na taverna <span aria-hidden="true">→</span></button>
+          <p class="form-feedback" role="status"></p>
+        </form>
+        <p class="auth-switch" id="auth-switch">Sua primeira aventura? <a href="#cadastro">Crie sua conta</a></p>
+        <span class="auth-footnote">Um lugar para jogar. Uma comunidade para ficar.</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><a href="#inicio" class="footer-brand">JOELHO DE GRILO</a><p>Boas companhias. Grandes histórias.</p><div><a href="#perfil">Meu perfil</a><a href="#pedidos">Meus pedidos</a><a href="https://linktr.ee/JOELHODEGRILO" target="_blank" rel="noopener noreferrer">Redes da taverna ↗</a></div><small>Projeto acadêmico de demonstração · proposta independente para a comunidade</small></footer>
+
+  <dialog id="editor-dialog" class="editor-dialog"><form id="editor-form"><div class="dialog-heading"><div><p class="eyebrow">REGISTROS DA TAVERNA</p><h2 id="editor-title">Novo registro</h2></div><button type="button" class="icon-button" data-close="editor-dialog" aria-label="Fechar formulário">×</button></div><div id="editor-fields" class="form-fields"></div><p class="form-feedback" role="status"></p><div class="dialog-actions"><button type="button" class="button outline small" data-close="editor-dialog">Cancelar</button><button type="submit" class="button primary small">Salvar registro</button></div></form></dialog>
+
+  <dialog id="confirm-dialog" class="confirm-dialog"><div class="dialog-heading"><h2>Excluir registro?</h2><button class="icon-button" data-close="confirm-dialog" aria-label="Fechar confirmação">×</button></div><p id="confirm-text"></p><p class="form-feedback" role="status"></p><div class="dialog-actions"><button class="button outline small" data-close="confirm-dialog">Manter registro</button><button class="button danger small" id="confirm-delete">Excluir</button></div></dialog>
+
+  <dialog id="cart-dialog" class="cart-dialog"><div class="dialog-heading"><div><p class="eyebrow">EQUIPAMENTO DE AVENTURA</p><h2>Seu inventário</h2></div><button class="icon-button" data-close="cart-dialog" aria-label="Fechar carrinho">×</button></div><div id="cart-items"></div><div class="cart-total"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div><p class="demo-note">Compra demonstrativa. Nenhuma cobrança será realizada. O pedido é registrado e o estoque é atualizado.</p><form id="checkout-form"><label>Nome para o pedido<input name="nome" id="checkout-name" minlength="2" maxlength="80" required placeholder="Seu nome"></label><label>E-mail da sua conta<input id="checkout-email" type="email" readonly placeholder="Entre para continuar"></label><button class="button primary" id="checkout-button" type="submit">Registrar pedido demonstrativo →</button><p class="form-feedback" role="status"></p></form><a href="#pedidos" class="inline-link" id="cart-orders-link">Ver meus pedidos ↗</a></dialog>
+
+  <dialog id="attendees-dialog" class="editor-dialog"><div class="dialog-heading"><div><p class="eyebrow">A COMPANHIA ESTÁ FORMADA</p><h2 id="attendees-title">Inscrições do evento</h2></div><button class="icon-button" data-close="attendees-dialog" aria-label="Fechar inscrições">×</button></div><div id="attendees-list"></div><form id="attendee-form"><label>Adicionar uma pessoa<select name="usuario_id" id="attendee-member" required></select></label><p class="form-feedback" role="status"></p><button type="submit" class="button primary small">Reservar lugar →</button></form></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <noscript><p class="noscript">Ative o JavaScript para usar o mural, a agenda e a loja.</p></noscript>
+</body>
+</html>

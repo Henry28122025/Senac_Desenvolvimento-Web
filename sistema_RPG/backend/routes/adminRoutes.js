@@ -1,0 +1,20 @@
+import express from "express";
+import { exigirAdmin } from "../middlewares/sessaoMiddleware.js";
+import { resumoAdmin, listarMembros, criarMembro, editarMembro, excluirMembro, listarPedidosAdmin, alterarPedidoAdmin, excluirPedidoAdmin, listarInscricoesAdmin, adicionarInscricaoAdmin, removerInscricaoAdmin } from "../controllers/adminControllers.js";
+import { atualizarComunidade } from "../controllers/comunidadeControllers.js";
+
+const router = express.Router();
+router.use(exigirAdmin);
+router.get("/resumo", resumoAdmin);
+router.get("/membros", listarMembros);
+router.post("/membros", criarMembro);
+router.put("/membros/:id", editarMembro);
+router.delete("/membros/:id", excluirMembro);
+router.get("/pedidos", listarPedidosAdmin);
+router.put("/pedidos/:id", alterarPedidoAdmin);
+router.delete("/pedidos/:id", excluirPedidoAdmin);
+router.get("/eventos/:id/inscricoes", listarInscricoesAdmin);
+router.post("/eventos/:id/inscricoes", adicionarInscricaoAdmin);
+router.delete("/inscricoes/:id", removerInscricaoAdmin);
+router.put("/comunidade", atualizarComunidade);
+export default router;

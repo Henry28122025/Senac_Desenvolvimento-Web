@@ -9,7 +9,11 @@ const inputAno = document.getElementById("ano");
 
 botao.addEventListener("click", buscarLivros);
 
-formCadastrarLivro.addEventListener("submit", cadastrarLivro);
+formCadastrarLivro.addEventListener("submit", salvarLivro);
+
+let idEdicao = null;
+
+const botaoSalvar = document.getElementById("BtnSalvar");
 
 async function buscarLivros() {
     mensagem.textContent = "Buscando livros...";
@@ -34,6 +38,10 @@ async function buscarLivros() {
                     <td>${livros[i].titulo}</td>
                     <td>${livros[i].autor}</td>
                     <td>${livros[i].ano}</td>
+                    <td>
+                        <button onclick="editarLivro(${livros[i].id})">Editar</button>
+                        <button onclick="excluirLivro(${livros[i].id})">Excluir</button>
+                    </td>
                 </tr>`;
         }
 
@@ -44,9 +52,12 @@ async function buscarLivros() {
     }
 }
 
-async function cadastrarLivro(event) {
-    //impede forms de recarregar a página
+async function salvarLivro(event) {
     event.preventDefault();
+    await cadastrarLivro(idEdicao);
+}
+
+async function cadastrarLivro(id = null) {
     try{
         const titulo = inputTitulo.value;
         const autor = inputAutor.value;
@@ -56,8 +67,9 @@ async function cadastrarLivro(event) {
         console.log("livro enviado:", livro);
 
         //enviar para API
-        const resposta = await fetch("http://localhost:3000/livros", {
-            method: "POST",
+        const url = id === null ? "http://localhost:3000/livros" : "http://localhost:3000/livros/" + id;
+        const resposta = await fetch(url, {
+            method: id === null ? "POST" : "PUT",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(livro)
         });
@@ -68,13 +80,37 @@ async function cadastrarLivro(event) {
         console.log("Resposta da API:", dados);
 
         formCadastrarLivro.reset();
+        idEdicao = null;
+        botaoSalvar.textContent = "Cadastrar";
 
         await buscarLivros();
         //mostrar mensagem retornada pela API
         mensagem.textContent = dados.mensagem;
 
     }catch (error) {
-        console.error("Erro ao cadastrar livro:", error);
-        mensagem.textContent = "Não foi possível cadastrar o livro. Verifique se a API está rodando.";
+        console.error("Erro ao salvar livro:", error);
+        mensagem.textContent = "Não foi possível salvar o livro. Verifique se a API está rodando.";
     }
 }
+
+async function editarLivro(id) {
+    try{
+        //buscar pelo id o livro que será editado
+        const resposta = await fetch("http://localhost:3000/livros/"+id);
+        if (!resposta.ok) {
+            throw new Error("Erro HTTP: " + resposta.status);
+        }
+        const livro = await resposta.json();
+        inputTitulo.value = livro.titulo;
+        inputAutor.value = livro.autor;
+        inputAno.value = livro.ano;
+
+        idEdicao = id;
+        botaoSalvar.textContent = "Atualizar";
+        mensagem.textContent = "Editando livro com ID: " + id;
+    } catch (error) {
+        mensagem.textContent = "Não foi possível carregar o livro para edição.";
+        console.log("Erro ao carregar livro para edição:", error);
+    }
+}
+    
