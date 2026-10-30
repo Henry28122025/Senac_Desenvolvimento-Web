@@ -2,4 +2,6 @@
 
 Nesta etapa existe apenas `GET /`, que apresenta o projeto.
 
-Nas próximas entregas, esta pasta receberá as rotas de autenticação, usuários, empresas, transportadoras, pedidos, solicitações e acompanhamento. Cada rota encaminhará a requisição ao controller responsável. As operações privadas passarão pelos middlewares de autenticação e autorização.
+Os arquivos de autenticação, usuários, administração, empresas, transportadoras, pedidos, solicitações, entregas, previsões e alertas já estão criados. Cada um contém um router vazio, ainda não ligado à aplicação.
+
+Nas próximas entregas, cada rota encaminhará a requisição ao controller responsável. As operações privadas passarão pelos middlewares de autenticação e autorização. Nesta etapa, somente `inicioRoutes.js` é utilizado por `app.js`.
