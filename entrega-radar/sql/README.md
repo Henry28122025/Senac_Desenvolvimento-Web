@@ -1,6 +1,6 @@
 # Scripts SQL
 
-Esta pasta está reservada para o banco de dados MySQL das próximas entregas.
+Esta pasta está reservada para o banco de dados MySQL das próximas entregas. O arquivo inicial `entrega_radar.sql` já está criado apenas com comentários, sem comandos de criação de banco ou tabelas.
 
 O planejamento inicial considera as entidades:
 

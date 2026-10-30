@@ -1,0 +1,5 @@
+-- EntregaRadar - Entrega 1.
+-- Arquivo reservado para o script MySQL da Entrega 2.
+-- Planejamento: usuários, empresas, transportadoras, pedidos,
+-- solicitações de transporte e atualizações de entrega.
+-- As tabelas e os relacionamentos ainda não estão implementados.
