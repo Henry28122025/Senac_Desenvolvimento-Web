@@ -1,11 +1,5 @@
-const express = require('express');
-const inicioRoutes = require('./routes/inicioRoutes');
-
-const app = express();
+const app = require('./app');
 const porta = 3000;
-
-app.use(express.json());
-app.use('/', inicioRoutes);
 
 if (require.main === module) {
     const servidor = app.listen(porta, function iniciarServidor() {
