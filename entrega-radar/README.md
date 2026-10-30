@@ -145,15 +145,18 @@ O histórico deverá permitir comparar previsões e datas reais, verificando a d
 
 Serão utilizadas as tecnologias solicitadas no trabalho: HTML, CSS, JavaScript, manipulação do DOM, Fetch, Node.js, Express, MySQL, API REST, JWT e controle de acesso.
 
-O código inicial segue o padrão de módulos CommonJS do projeto de referência, com `require` e `module.exports`, e separa as responsabilidades do back-end.
+O código inicial segue o padrão de módulos CommonJS do projeto de referência da atividade, com `require` e `module.exports`. A organização também segue o projeto `sistema_RPG` deste repositório: `backend`, `frontend` e `sql`, com rotas, controllers, middlewares e arquivos de banco separados. No backend, `app.js` configura a aplicação e `server.js` inicia o servidor.
 
 | Caminho | Responsabilidade |
 | --- | --- |
-| `backend/server.js` | Configuração inicial do Express e inicialização do servidor. |
+| `backend/app.js` | Configuração inicial do Express e ligação com as rotas implementadas. |
+| `backend/server.js` | Inicialização do servidor. |
 | `backend/routes/` | Associação entre os caminhos da API e os controllers. |
 | `backend/controllers/` | Tratamento das requisições e, futuramente, regras dos pedidos e demais recursos. |
 | `backend/middlewares/` | Local previsto para autenticação, autorização e validações compartilhadas. |
 | `backend/database/` | Local previsto para a conexão com o MySQL. |
+| `backend/tests/` | Pasta reservada para os testes das próximas etapas. |
+| `backend/.env.example` | Modelo sem credenciais para a configuração futura do banco e do JWT. Ainda não é carregado pelo servidor. |
 | `backend/package.json` | Identificação do back-end, dependências iniciais e comandos de execução. |
 | `frontend/` | Estrutura inicial da interface em HTML, CSS e JavaScript. |
 | `frontend/css/` | Estilos da interface. |
@@ -162,6 +165,27 @@ O código inicial segue o padrão de módulos CommonJS do projeto de referência
 | `sql/` | Local reservado para os scripts do banco de dados das próximas entregas. |
 | `README.md` | Documentação do projeto, atualizada a cada entrega. |
 | `.gitignore` | Exclusão de dependências, configurações privadas e arquivos temporários do Git. |
+
+### Arquivos iniciais por módulo
+
+Os módulos abaixo já possuem seus arquivos de rotas e controllers criados. Eles estão reservados para implementação posterior e ainda não oferecem endpoints funcionais.
+
+| Módulo | Arquivo em `backend/routes/` | Arquivo em `backend/controllers/` |
+| --- | --- | --- |
+| Autenticação | `authRoutes.js` | `authControllers.js` |
+| Usuários | `usuariosRoutes.js` | `usuariosControllers.js` |
+| Administração | `adminRoutes.js` | `adminControllers.js` |
+| Empresas contratantes | `empresasRoutes.js` | `empresasControllers.js` |
+| Transportadoras | `transportadorasRoutes.js` | `transportadorasControllers.js` |
+| Pedidos de materiais | `pedidosRoutes.js` | `pedidosControllers.js` |
+| Solicitações de transporte | `solicitacoesRoutes.js` | `solicitacoesControllers.js` |
+| Acompanhamento das entregas | `entregasRoutes.js` | `entregasControllers.js` |
+| Previsões | `previsoesRoutes.js` | `previsoesControllers.js` |
+| Alertas | `alertasRoutes.js` | `alertasControllers.js` |
+
+A rota pública de identificação continua em `inicioRoutes.js` e `inicioController.js`. Os arquivos de autenticação, autorização, CORS e tratamento de erros estão reservados em `middlewares`. A conexão está reservada em `database/conexao.js`, e o script futuro em `sql/entrega_radar.sql`.
+
+No frontend, `css`, `js` e `assets` já estão criadas. As pastas reservadas contêm um arquivo inicial ou `.gitkeep`, pois o Git não registra pastas vazias.
 
 ### Dados previstos para as próximas etapas
 
@@ -177,7 +201,7 @@ Essa é uma visão inicial dos dados. As tabelas, as chaves e o script SQL serã
 - Proposta de solução, objetivos e funcionalidades previstas.
 - Perfis de usuários, ações, fluxo e regras iniciais.
 - Planejamento das estimativas e das limitações de dados.
-- Pastas do projeto e separação inicial do back-end.
+- Pastas do projeto e separação inicial do back-end, incluindo os arquivos reservados de cada módulo previsto.
 - Página inicial de identificação e uma rota de apresentação da API.
 - README e `.gitignore`.
 
