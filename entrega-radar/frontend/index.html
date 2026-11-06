@@ -1,23 +1,23 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EntregaRadar - Entrega 1</title>
-    <link rel="stylesheet" href="css/style.css">
-    <script src="js/script.js" defer></script>
-</head>
-<body>
-    <main>
-        <p class="etapa">PROJETO WEB / ENTREGA 1</p>
-        <h1>EntregaRadar</h1>
-        <p>Previsão de entregas de materiais e conexão entre empresas e transportadoras.</p>
-        <h2>Proposta</h2>
-        <p>Ajudar empresas, com foco nas indústrias, a acompanhar materiais, identificar riscos de atraso e encontrar parceiros de transporte.</p>
-        <h2>Etapa atual</h2>
-        <p>Planejamento e estrutura inicial. As funcionalidades serão desenvolvidas nas próximas entregas.</p>
-        <p>O problema, os perfis de usuários e o fluxo previsto estão documentados no README do projeto.</p>
-        <footer>Henry Matheus da Silveira / Trabalho individual</footer>
-    </main>
-</body>
-</html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EntregaRadar — Acesso</title><link rel="stylesheet" href="css/style.css"><script src="js/script.js" defer></script></head>
+<body><main><p class="etapa">PROJETO WEB / ENTREGA 2</p><h1>EntregaRadar</h1>
+<p>Acompanhe materiais e conecte sua empresa a transportadoras. Nesta etapa: cadastro e acesso à conta.</p>
+<nav aria-label="Acesso"><button type="button" id="abrir-login">Entrar</button> <button type="button" id="abrir-cadastro">Criar conta</button></nav>
+<p id="mensagem" role="status" aria-live="polite"></p>
+<form id="login"><h2>Entre na sua conta</h2>
+<label for="login-email">E-mail</label><input id="login-email" name="email" type="email" autocomplete="username" maxlength="254" required>
+<label for="login-senha">Senha</label><input id="login-senha" name="senha" type="password" autocomplete="current-password" minlength="12" maxlength="128" required>
+<button type="submit">Entrar</button></form>
+<form id="cadastro" hidden><h2>Crie sua conta</h2>
+<label for="nome">Seu nome</label><input id="nome" name="nome" autocomplete="name" minlength="2" maxlength="100" required>
+<label for="perfil">Tipo de conta</label><select id="perfil" name="perfil"><option value="contratante">Empresa contratante</option><option value="transportadora">Transportadora</option></select>
+<label for="organizacao">Nome da empresa ou transportadora</label><input id="organizacao" name="organizacao" autocomplete="organization" minlength="2" maxlength="150" required>
+<p>Cada cadastro cria uma organização própria. Convites para equipes serão implementados em outra etapa.</p>
+<label for="cadastro-email">E-mail</label><input id="cadastro-email" name="email" type="email" autocomplete="username" maxlength="254" required>
+<label for="cadastro-senha">Senha — de 12 a 128 caracteres</label><input id="cadastro-senha" name="senha" type="password" autocomplete="new-password" minlength="12" maxlength="128" required>
+<label for="confirmar">Repita a senha</label><input id="confirmar" name="confirmar" type="password" autocomplete="new-password" minlength="12" maxlength="128" required>
+<button type="submit">Criar conta</button></form>
+<section id="conta" hidden><h2>Minha conta</h2><p id="dados"></p><button type="button" id="admin" hidden>Verificar acesso administrativo</button> <button type="button" id="sair">Sair</button>
+<p>Pedidos, diretório e previsões serão disponibilizados nas próximas entregas.</p></section>
+<footer>Henry Matheus da Silveira / Trabalho individual</footer></main></body></html>

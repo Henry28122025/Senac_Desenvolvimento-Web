@@ -2,10 +2,10 @@
 
 Previsão de entregas de materiais e conexão entre empresas e transportadoras.
 
-**Aluno:** Henry Matheus da Silveira  
-**Trabalho:** individual  
-**Etapa:** Entrega 1 - Problema e estrutura inicial  
-**Data:** 30/10/2026
+**Aluno:** Henry Matheus da Silveira
+**Trabalho:** individual
+**Etapa:** Entrega 2 - Banco de dados e autenticação
+**Atualização:** 06/11/2026
 
 EntregaRadar é o nome provisório do projeto. O sistema será voltado a empresas em geral, com foco nas indústrias que dependem do recebimento de materiais para manter sua produção.
 
@@ -49,7 +49,7 @@ Ajudar empresas a planejar o recebimento de materiais e agir antes que um atraso
 
 ## 3. Principais funcionalidades previstas
 
-As funcionalidades desta seção serão desenvolvidas nas próximas etapas. Nesta entrega, elas estão apenas planejadas.
+Esta seção preserva a visão geral do projeto. O estado implementado está na seção 8; cadastro e login já funcionam na Entrega 2.
 
 | Funcionalidade | Descrição |
 | --- | --- |
@@ -141,102 +141,123 @@ O histórico deverá permitir comparar previsões e datas reais, verificando a d
 - A pesquisa de transportadoras mostrará informações comerciais. Pedidos e endereços detalhados não ficarão públicos.
 - Os alertas deverão indicar o motivo e a data da última atualização utilizada.
 
-## 8. Tecnologias e organização
 
-Serão utilizadas as tecnologias solicitadas no trabalho: HTML, CSS, JavaScript, manipulação do DOM, Fetch, Node.js, Express, MySQL, API REST, JWT e controle de acesso.
+## 8. Entrega 2 concluída no código
 
-O código inicial segue o padrão de módulos CommonJS do projeto de referência da atividade, com `require` e `module.exports`. A organização também segue o projeto `sistema_RPG` deste repositório: `backend`, `frontend` e `sql`, com rotas, controllers, middlewares e arquivos de banco separados. No backend, `app.js` configura a aplicação e `server.js` inicia o servidor.
+Mantidos CommonJS, Node.js/Express e as pastas backend, frontend e sql, com app.js separado de server.js. A referência sistema_RPG foi consultada pela organização, sem copiar sua autenticação de sessões (aqui JWT é obrigatório).
 
-| Caminho | Responsabilidade |
+- Esquema MySQL relacional com seis tabelas, chaves, índices e restrições.
+- Cadastro transacional: cria organização e usuário juntos, ou desfaz tudo.
+- Perfis públicos contratante e transportadora; administrador somente por CLI local.
+- Senhas com scrypt da biblioteca nativa node:crypto, salt aleatório de 16 bytes, N=32768, r=8, p=3, comparação em tempo constante; senha de 12 a 128 caracteres.
+- JWT HS256 válido por uma hora, com subject, issuer e audience verificados; segredo obrigatório com pelo menos 32 bytes, sem valor padrão.
+- API consulta o perfil atual e o estado ativo no banco em cada chamada protegida.
+- Login limitado a 30 requisições de autenticação por IP em 15 minutos (cadastro compartilha o limite). Limitador local em memória, adequado à demonstração em uma instância.
+- Consultas parametrizadas; e-mail normalizado e único, erros sem SQL/segredos/hash.
+- Telas simples com labels, confirmação de senha, mensagens acessíveis, botões desabilitados durante requisições e Fetch na mesma origem.
+
+### Modelo e vínculos
+
+| Tabela | Relações e finalidade |
 | --- | --- |
-| `backend/app.js` | Configuração inicial do Express e ligação com as rotas implementadas. |
-| `backend/server.js` | Inicialização do servidor. |
-| `backend/routes/` | Associação entre os caminhos da API e os controllers. |
-| `backend/controllers/` | Tratamento das requisições e, futuramente, regras dos pedidos e demais recursos. |
-| `backend/middlewares/` | Local previsto para autenticação, autorização e validações compartilhadas. |
-| `backend/database/` | Local previsto para a conexão com o MySQL. |
-| `backend/tests/` | Pasta reservada para os testes das próximas etapas. |
-| `backend/.env.example` | Modelo sem credenciais para a configuração futura do banco e do JWT. Ainda não é carregado pelo servidor. |
-| `backend/package.json` | Identificação do back-end, dependências iniciais e comandos de execução. |
-| `frontend/` | Estrutura inicial da interface em HTML, CSS e JavaScript. |
-| `frontend/css/` | Estilos da interface. |
-| `frontend/js/` | Scripts da interface e futura integração com a API por Fetch. |
-| `frontend/assets/` | Imagens e outros recursos visuais futuros. |
-| `sql/` | Local reservado para os scripts do banco de dados das próximas entregas. |
-| `README.md` | Documentação do projeto, atualizada a cada entrega. |
-| `.gitignore` | Exclusão de dependências, configurações privadas e arquivos temporários do Git. |
+| empresas | Organização contratante; possui vários usuários e pedidos. |
+| transportadoras | Organização prestadora; serviços, regiões, tipos de material e disponibilidade preparados para o futuro. |
+| usuarios | E-mail único, hash e perfil. Contratante exige empresa; transportadora exige prestadora; admin não tem vínculo. CHECK impede combinações incompatíveis. |
+| pedidos | Pertence a uma empresa, com no máximo uma transportadora vinculada. Quantidade positiva e prazo original. |
+| solicitacoes_transporte | Liga pedido a prestadora. FK composta pedido/empresa impede atribuir a solicitação a outra empresa. |
+| atualizacoes_entrega | Histórico do pedido com usuário autor, etapa, data e observação. |
 
-### Arquivos iniciais por módulo
+Todas as tabelas usam InnoDB, PK auto incremental, UTF-8 e FKs sem exclusão em cascata para preservar histórico. O SQL é inicial, idempotente por CREATE IF NOT EXISTS; não migra tabelas de versões anteriores.
 
-Os módulos abaixo já possuem seus arquivos de rotas e controllers criados. Eles estão reservados para implementação posterior e ainda não oferecem endpoints funcionais.
+Isolamento: o cadastro não aceita empresa_id, transportadora_id ou campos adicionais, e cria uma organização própria. Não há vínculo por nome nem adesão automática a empresas existentes. `/api/usuarios/me` usa exclusivamente o subject autenticado; IDs em query/body não selecionam usuários ou organizações. Nenhuma rota de pedidos/empresas está exposta nesta etapa. Na Entrega 3 cada consulta deverá incluir `empresa_id = req.usuario.empresa_id` para contratantes; prestadoras deverão comprovar vínculo confirmado ao pedido. A FK não substitui essa autorização. Convites para equipes ficam para uma etapa posterior.
 
-| Módulo | Arquivo em `backend/routes/` | Arquivo em `backend/controllers/` |
-| --- | --- | --- |
-| Autenticação | `authRoutes.js` | `authControllers.js` |
-| Usuários | `usuariosRoutes.js` | `usuariosControllers.js` |
-| Administração | `adminRoutes.js` | `adminControllers.js` |
-| Empresas contratantes | `empresasRoutes.js` | `empresasControllers.js` |
-| Transportadoras | `transportadorasRoutes.js` | `transportadorasControllers.js` |
-| Pedidos de materiais | `pedidosRoutes.js` | `pedidosControllers.js` |
-| Solicitações de transporte | `solicitacoesRoutes.js` | `solicitacoesControllers.js` |
-| Acompanhamento das entregas | `entregasRoutes.js` | `entregasControllers.js` |
-| Previsões | `previsoesRoutes.js` | `previsoesControllers.js` |
-| Alertas | `alertasRoutes.js` | `alertasControllers.js` |
+### Instalação e execução local
 
-A rota pública de identificação continua em `inicioRoutes.js` e `inicioController.js`. Os arquivos de autenticação, autorização, CORS e tratamento de erros estão reservados em `middlewares`. A conexão está reservada em `database/conexao.js`, e o script futuro em `sql/entrega_radar.sql`.
-
-No frontend, `css`, `js` e `assets` já estão criadas. As pastas reservadas contêm um arquivo inicial ou `.gitkeep`, pois o Git não registra pastas vazias.
-
-### Dados previstos para as próximas etapas
-
-O planejamento inicial considera usuários, empresas contratantes, transportadoras, pedidos, solicitações de transporte e atualizações das entregas. Cada pedido pertencerá a uma empresa e poderá ser vinculado a uma transportadora. As solicitações e atualizações terão relação com o pedido correspondente.
-
-Essa é uma visão inicial dos dados. As tabelas, as chaves e o script SQL serão definidos e implementados na Entrega 2.
-
-## 9. Estado desta entrega
-
-### Incluído na Entrega 1
-
-- Definição do problema, do público e da justificativa.
-- Proposta de solução, objetivos e funcionalidades previstas.
-- Perfis de usuários, ações, fluxo e regras iniciais.
-- Planejamento das estimativas e das limitações de dados.
-- Pastas do projeto e separação inicial do back-end, incluindo os arquivos reservados de cada módulo previsto.
-- Página inicial de identificação e uma rota de apresentação da API.
-- README e `.gitignore`.
-
-### Ainda não implementado
-
-Banco MySQL, cadastro, login, JWT, permissões, CRUD dos pedidos, diretório funcional, solicitações de transporte, cálculo de previsões e alertas. Esses itens estão planejados e não devem ser apresentados como prontos nesta etapa.
-
-## 10. Como conferir a estrutura inicial
-
-A página de identificação pode ser aberta pelo arquivo `frontend/index.html`. Ela apenas apresenta o projeto e a etapa atual.
-
-Para iniciar a API, instale o Node.js em versão compatível com o Express 5 e, dentro da pasta deste projeto, execute:
+Requer Node.js 22+ e MySQL 8.0.16+ (versão com CHECK aplicado). Na pasta `entrega-radar/backend`:
 
 ```bash
-cd backend
-npm install
+npm ci
+```
+
+Copie `.env.example` para `.env`. Configure `DB_HOST`, `DB_PORT`, `DB_NAME=entrega_radar`, `DB_USER`, `DB_PASSWORD`, `PORT=3000` e `JWT_SECRET`. Gere um segredo local, mantenha-o privado e cole somente no `.env`:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+```
+
+O arquivo `.env` é carregado da pasta backend mesmo se iniciar por outro diretório. Execute o SQL com uma conta local com permissão de criar banco/tabelas:
+
+```bash
+npm run db:setup
+```
+
+Alternativa: abra `sql/entrega_radar.sql` no MySQL Workbench e execute integralmente. O script usa o nome fixo `entrega_radar`. Depois, use no `.env` uma conta de aplicação limitada a SELECT/INSERT/UPDATE/DELETE nesse banco, sem permissões administrativas ou de DDL.
+
+```bash
 npm start
 ```
 
-Abra `http://localhost:3000/`. A resposta será um JSON identificando o projeto e a Entrega 1. Essa rota não consulta banco, não faz previsões e não exige credenciais. Para parar o servidor, use `Ctrl+C`.
+Abra **http://localhost:3000**. O Express serve frontend e API juntos; não abra index.html via file://. Cadastro cria a conta; depois faça login. O servidor local escuta apenas 127.0.0.1. A rota `/api` identifica a etapa sem consultar o banco.
 
-## 11. Uso do GitHub
+JWT fica somente na memória da página; sair remove a referência local e recarregar pede novo login. Não há refresh token ou revogação individual no logout; um token copiado continua válido até expirar. Desativar o usuário no banco bloqueia novas chamadas imediatamente. Não há recuperação de senha nesta entrega. Para uso público futuro: HTTPS, segredo privado, limite distribuído entre instâncias e revisão da gestão de sessões.
 
-O projeto será mantido na pasta [`entrega-radar`](https://github.com/Henry28122025/Senac_Desenvolvimento-Web/tree/main/entrega-radar) do repositório [`Senac_Desenvolvimento-Web`](https://github.com/Henry28122025/Senac_Desenvolvimento-Web). As quatro entregas deverão evoluir nessa mesma pasta e nesse mesmo repositório.
+### Primeiro administrador
 
-Para registrar novas alterações, os comandos abaixo devem ser executados na raiz do repositório local:
+Após preparar o banco, execute no terminal local de backend:
 
 ```bash
-git status
-git add entrega-radar
-git diff --cached --stat
-git commit -m "Atualiza o projeto EntregaRadar"
-git push
+npm run admin
 ```
 
-Confira no GitHub se a pasta, os arquivos e o commit foram publicados. Não envie `node_modules`, arquivos `.env`, senhas ou tokens. Se já existirem outras alterações preparadas para commit, revise a seleção antes de confirmar.
+Informe nome e e-mail; digite uma senha de 12–128 caracteres e confirme-a na próxima entrada (ambas ocultas). O CLI insere uma nova conta com hash e perfil administrador. E-mails existentes são rejeitados, sem promover contas públicas. Não existe senha fixa, argumento de senha no shell ou endpoint de criação administrativa. Proteja o acesso ao terminal e ao banco.
 
-O histórico deve registrar o desenvolvimento real. A avaliação considera os arquivos publicados no GitHub até o prazo de cada entrega.
+### Rotas
+
+| Método e rota | Acesso | Resultado |
+| --- | --- | --- |
+| GET /api | Público | Identificação da API. |
+| POST /api/auth/cadastro | Público | nome, email, senha, perfil, organizacao. 201 ou 400/409. |
+| POST /api/auth/login | Público | email, senha; retorna token Bearer e expiração. 200 ou 400/401. |
+| GET /api/usuarios/me | Bearer válido | Dados básicos do próprio usuário, sem hash. |
+| GET /api/admin/painel | Administrador | Demonstra autorização; perfis públicos recebem 403. |
+
+Exemplo de corpo de cadastro (escolha sua própria senha; valores abaixo são somente ilustrativos):
+
+```json
+{"nome":"Pessoa Exemplo","email":"pessoa@example.test","senha":"uma frase privada longa","perfil":"contratante","organizacao":"Empresa Exemplo"}
+```
+
+Para transportadoras altere perfil para `transportadora`. Login recebe apenas e-mail e senha. Para testar pelo cliente HTTP, copie o token retornado e envie o header `Authorization: Bearer <token>` na rota `/api/usuarios/me`; repita no painel administrativo para verificar 403. Sem token, adulterado ou expirado deve retornar 401. Não compartilhe tokens em capturas ou commits.
+
+### Verificação executada e limites
+
+```bash
+npm test
+npm audit --omit=dev
+```
+
+Em 06/11/2026: quatro testes aprovados, zero falhas, um teste MySQL real ignorado; auditoria de dependências de produção sem vulnerabilidades reportadas.
+
+Os quatro testes usam banco simulado e verificam validação, rejeição de cadastro admin e IDs externos, hash/salt, duplicidade com rollback, login incorreto/correto, JWT válido/ausente/adulterado/expirado/sem exp/emissor incorreto, usuário inativo, 403 para ambos os perfis públicos e 200 para administrador. Também verificam erro interno sanitizado, JSON inválido e ausência de acesso a `.env`.
+
+O teste de interface usa jsdom, carrega HTML/JS servido pelo Express e executa cadastro → login → minha conta → saída com Fetch HTTP real e banco simulado. Não é teste visual de navegador.
+
+**Pendente de execução:** criação real das tabelas, FKs/CHECK, transações e persistência MySQL. Não havia serviço MySQL acessível em 127.0.0.1:3306 (ECONNREFUSED), cliente MySQL ou Docker disponíveis. O teste de banco real está em `backend/tests/mysql.test.js`. Para executá-lo, com uma instância MySQL disponível e credenciais que possam criar um banco exclusivo, configure `DB_NAME=entrega_radar_test` e `RUN_MYSQL_TESTS=1` no ambiente do processo e execute `npm test`. O teste cria esse banco sem apagar tabelas existentes, insere dados de e-mail aleatório e remove seus registros no final. Nunca aponte esse teste ao banco de uso real. O restante dos testes não requer banco; execute sem RUN_MYSQL_TESTS para ignorá-lo.
+
+Codex Security: revisão estática formal de 19 arquivos de backend/SQL do snapshot inicial, sem vulnerabilidades confirmadas; cobertura parcial, excluindo interface, testes, lockfile e alterações posteriores. Essa revisão não substitui execução do banco nem auditoria futura dos fluxos da Entrega 3.
+
+### Ferramentas e referências
+
+Context7 consultado para Express 5 (propagação de erros async), mysql2/promise (pool, execute e placeholders) e jsonwebtoken (expiração, algoritmos, issuer e audience). Hash fundamentado na [documentação oficial node:crypto](https://nodejs.org/api/crypto.html#cryptoscryptpassword-salt-keylen-options-callback). Codex Security usado para revisão do diff de backend/SQL. Product Design teve suas orientações consultadas; fluxo foi mantido simples com base na interface existente, sem projeto visual novo.
+
+Figma não foi necessário: não há referência visual fornecida nem redesign solicitado. OpenAI Developers não se aplicou: nenhuma integração IA. Supabase não foi usado porque o banco obrigatório é MySQL. Não foi contratado ou publicado serviço.
+
+Hospedagem futura: manter frontend/API na mesma origem, com processo Node.js/Express e MySQL em host privado. Frontend estático também pode ficar na Vercel, desde que se configure um proxy para a API ou CORS restrito à origem autorizada. A API poderia ser adaptada para Vercel Functions com MySQL externo, pool dimensionado e limites de execução verificados; MySQL não é instalado dentro da Function. Consulte [limites oficiais](https://vercel.com/docs/functions/limitations). A configuração atual é local e não pretende ser um deploy pronto. Orientações de arquitetura da skill Vercel consultadas, sem alteração em conta/projeto.
+
+## 9. Próximas entregas
+
+Entrega 3: CRUD de pedidos com permissões por organização, histórico e integração completa. Etapas posteriores: diretório funcional, solicitações/aceites, etapas de entrega, estimativas, alertas e avaliação das previsões. As tabelas desses fluxos estão preparadas, porém não há endpoints de negócio implementados. Não há IA, GPS, pagamentos ou serviços externos adicionados.
+
+## 10. GitHub
+
+As quatro entregas permanecem na mesma pasta e repositório. `.gitignore` exclui node_modules, .env e temporários. Versionados apenas fonte, SQL, lockfile, testes e documentação. Antes de registrar novos commits, revise `git status` e selecione somente `entrega-radar`.

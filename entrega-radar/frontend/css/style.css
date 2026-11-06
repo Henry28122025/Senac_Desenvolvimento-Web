@@ -44,3 +44,12 @@ footer {
     border-top: 1px solid #d8e0ea;
     font-size: 14px;
 }
+
+[hidden] { display: none !important; }
+label { display:block; margin-top:16px; font-weight:600; }
+input, select { width:100%; padding:12px; border:1px solid #8796ab; border-radius:5px; font:inherit; }
+button { padding:11px 18px; margin-top:18px; border:0; border-radius:5px; background:#2456a6; color:white; font:inherit; cursor:pointer; }
+button:disabled { opacity:.65; cursor:wait; }
+:focus-visible { outline:3px solid #b36a00; outline-offset:3px; }
+#mensagem { white-space:pre-wrap; font-weight:600; }
+@media(max-width:480px) { body { padding:16px 10px; } main { padding:20px; } h1 { font-size:30px; } }
