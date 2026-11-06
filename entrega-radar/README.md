@@ -126,6 +126,8 @@ Exemplo ilustrativo de apresentação, que não representa um cálculo implement
 
 O histórico deverá permitir comparar previsões e datas reais, verificando a diferença em dias e a frequência com que as entregas ocorreram dentro da faixa prevista. Esses resultados ajudarão a avaliar e ajustar o cálculo no desenvolvimento posterior.
 
+O [plano de validação com dados reais](docs/validacao-previsoes.md) detalha a coleta, a separação cronológica, as referências de comparação, as métricas e as mensagens de limitação. A validação ainda não foi executada: não há base real fornecida nem cálculo implementado nesta etapa.
+
 **Premissa inicial:** os dados serão cadastrados e atualizados pelos usuários. Não estão previstas, nesta versão, integrações com GPS, sistemas de gestão das empresas ou serviços de clima e trânsito. Os avisos serão exibidos no painel; e-mail e WhatsApp não fazem parte do escopo inicial.
 
 ## 7. Regras de negócio previstas
@@ -261,3 +263,9 @@ Entrega 3: CRUD de pedidos com permissões por organização, histórico e integ
 ## 10. GitHub
 
 As quatro entregas permanecem na mesma pasta e repositório. `.gitignore` exclui node_modules, .env e temporários. Versionados apenas fonte, SQL, lockfile, testes e documentação. Antes de registrar novos commits, revise `git status` e selecione somente `entrega-radar`.
+
+## 11. Acompanhamento do parecer da Entrega 1
+
+O professor atribuiu **PD - Plenamente Desenvolvido** aos quatro indicadores, considerando o estado de 30/10/2026 no commit `1872a43`. As orientações são manter commits descritivos, atualizar a documentação, preservar a separação de responsabilidades e validar as previsões com dados reais, comunicando suas limitações.
+
+O [acompanhamento das orientações](docs/acompanhamento.md) relaciona cada recomendação às ações tomadas e às pendências. A documentação dos módulos ativos foi atualizada, e a identificação pública da API também passa por rota e controller próprios. A validação real de previsões permanece planejada para as etapas posteriores, sem resultados ou percentuais inventados.

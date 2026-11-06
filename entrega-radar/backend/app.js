@@ -13,7 +13,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.json({ limit: '16kb' }));
-app.get('/api', (req, res) => res.json({ projeto: 'EntregaRadar', entrega: 2 }));
+app.use('/api', require('./routes/inicioRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/usuarios', require('./routes/usuariosRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
