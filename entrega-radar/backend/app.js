@@ -1,10 +1,20 @@
+require('./config');
 const express = require('express');
-const inicioRoutes = require('./routes/inicioRoutes');
-
+const path = require('node:path');
 const app = express();
-
-app.use(express.json());
-app.use('/', inicioRoutes);
-
-// As rotas dos demais módulos serão conectadas quando forem implementadas.
+app.disable('x-powered-by');
+app.use((req,res,next) => {
+ res.set('X-Content-Type-Options','nosniff');
+ res.set('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");
+ if (req.path.startsWith('/api')) res.set('Cache-Control','no-store');
+ next();
+});
+app.use(express.json({ limit:'16kb' }));
+app.get('/api', (req,res) => res.json({ projeto:'EntregaRadar',entrega:2 }));
+app.use('/api/auth',require('./routes/authRoutes'));
+app.use('/api/usuarios',require('./routes/usuariosRoutes'));
+app.use('/api/admin',require('./routes/adminRoutes'));
+app.use(express.static(path.join(__dirname,'../frontend')));
+app.use((req,res) => res.status(404).json({ mensagem:'Rota não encontrada.' }));
+app.use(require('./middlewares/errosMiddleware').tratarErro);
 module.exports = app;

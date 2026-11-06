@@ -1,3 +1,6 @@
-// Entrega 1: arquivo reservado para validar o perfil e o vínculo do usuário com o recurso solicitado.
-// A implementação será feita nas próximas etapas.
-// Este arquivo não é utilizado pelo app.js nesta entrega.
+const { ErroHttp } = require('./errosMiddleware');
+module.exports = (...perfis) => (req,res,next) => {
+ if (!req.usuario) throw new ErroHttp(401,'Autenticação necessária.');
+ if (!perfis.includes(req.usuario.perfil)) throw new ErroHttp(403,'Seu perfil não permite esta ação.');
+ next();
+};

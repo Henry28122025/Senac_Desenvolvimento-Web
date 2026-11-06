@@ -1,14 +1,1 @@
-# Scripts SQL
-
-Esta pasta está reservada para o banco de dados MySQL das próximas entregas. O arquivo inicial `entrega_radar.sql` já está criado apenas com comentários, sem comandos de criação de banco ou tabelas.
-
-O planejamento inicial considera as entidades:
-
-- Usuários, com perfil e vínculo com a organização correspondente.
-- Empresas contratantes.
-- Transportadoras, com informações comerciais e disponibilidade.
-- Pedidos, pertencentes a uma empresa e com transportadora opcional.
-- Solicitações de transporte, vinculadas a pedidos e transportadoras.
-- Atualizações de entrega, vinculadas ao pedido e ao usuário responsável pelo registro.
-
-O modelo, os campos, as chaves e os relacionamentos serão detalhados na Entrega 2. A Entrega 1 não contém criação de banco, tabelas ou dados de demonstração.
+Execute entrega_radar.sql em MySQL 8.0.16+. Seis tabelas com PK, FK, índice composto e CHECK de vínculos. Não contém usuários, senhas ou dados de demonstração.

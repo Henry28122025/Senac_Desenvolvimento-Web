@@ -1,15 +1,6 @@
 const app = require('./app');
-const porta = 3000;
-
 if (require.main === module) {
-    const servidor = app.listen(porta, function iniciarServidor() {
-        console.log('EntregaRadar: http://localhost:' + porta);
-    });
-
-    servidor.on('error', function tratarErro(erro) {
-        console.error('Não foi possível iniciar o servidor:', erro.message);
-        process.exitCode = 1;
-    });
+ const server = app.listen(Number(process.env.PORT || 3000), '127.0.0.1', () => console.log('EntregaRadar: http://localhost:' + (process.env.PORT || 3000)));
+ server.on('error', () => { console.error('Não foi possível iniciar o servidor.'); process.exitCode=1; });
 }
-
-module.exports = app;
+module.exports=app;
