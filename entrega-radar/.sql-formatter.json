@@ -1,0 +1,5 @@
+{
+    "language": "mysql",
+    "tabWidth": 4,
+    "keywordCase": "upper"
+}

@@ -1,1 +1,1 @@
-exports.painel = (req,res) => res.json({ mensagem:'Acesso administrativo autorizado.' });
+exports.painel = (req, res) => res.json({ mensagem: 'Acesso administrativo autorizado.' });
