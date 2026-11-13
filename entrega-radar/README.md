@@ -4,8 +4,8 @@ Previsão de entregas de materiais e conexão entre empresas e transportadoras.
 
 **Aluno:** Henry Matheus da Silveira
 **Trabalho:** individual
-**Etapa:** Entrega 2 - Banco de dados e autenticação
-**Atualização:** 06/11/2026
+**Etapa:** Entrega 3 - CRUD de pedidos
+**Atualização:** 13/11/2026
 
 EntregaRadar é o nome provisório do projeto. O sistema será voltado a empresas em geral, com foco nas indústrias que dependem do recebimento de materiais para manter sua produção.
 
@@ -49,7 +49,7 @@ Ajudar empresas a planejar o recebimento de materiais e agir antes que um atraso
 
 ## 3. Principais funcionalidades previstas
 
-Esta seção preserva a visão geral do projeto. O estado implementado está na seção 8; cadastro e login já funcionam na Entrega 2.
+Esta seção preserva a visão geral do projeto. As seções 8 e 9 descrevem a autenticação e o CRUD disponíveis.
 
 | Funcionalidade | Descrição |
 | --- | --- |
@@ -171,7 +171,7 @@ Mantidos CommonJS, Node.js/Express e as pastas backend, frontend e sql, com app.
 
 Todas as tabelas usam InnoDB, PK auto incremental, UTF-8 e FKs sem exclusão em cascata para preservar histórico. O SQL é inicial, idempotente por CREATE IF NOT EXISTS; não migra tabelas de versões anteriores.
 
-Isolamento: o cadastro não aceita empresa_id, transportadora_id ou campos adicionais, e cria uma organização própria. Não há vínculo por nome nem adesão automática a empresas existentes. `/api/usuarios/me` usa exclusivamente o subject autenticado; IDs em query/body não selecionam usuários ou organizações. Nenhuma rota de pedidos/empresas está exposta nesta etapa. Na Entrega 3 cada consulta deverá incluir `empresa_id = req.usuario.empresa_id` para contratantes; prestadoras deverão comprovar vínculo confirmado ao pedido. A FK não substitui essa autorização. Convites para equipes ficam para uma etapa posterior.
+Isolamento: o cadastro não aceita empresa_id, transportadora_id ou campos adicionais, e cria uma organização própria. Não há vínculo por nome nem adesão automática a empresas existentes. `/api/usuarios/me` usa exclusivamente o subject autenticado; IDs em query/body não selecionam usuários ou organizações. O CRUD da Entrega 3 aplica `empresa_id = req.usuario.empresa_id` nas consultas e alterações. O fluxo de transporte vinculado e os convites para equipes ficam para etapas posteriores.
 
 ### Instalação e execução local
 
@@ -240,11 +240,11 @@ npm audit --omit=dev
 
 Em 06/11/2026: quatro testes aprovados, zero falhas, um teste MySQL real ignorado; auditoria de dependências de produção sem vulnerabilidades reportadas.
 
-Os quatro testes usam banco simulado e verificam validação, rejeição de cadastro admin e IDs externos, hash/salt, duplicidade com rollback, login incorreto/correto, JWT válido/ausente/adulterado/expirado/sem exp/emissor incorreto, usuário inativo, 403 para ambos os perfis públicos e 200 para administrador. Também verificam erro interno sanitizado, JSON inválido e ausência de acesso a `.env`.
+Os testes de autenticação usam banco simulado e verificam validação, rejeição de cadastro admin e IDs externos, hash/salt, duplicidade com rollback, login incorreto/correto, JWT válido/ausente/adulterado/expirado/sem exp/emissor incorreto, usuário inativo, 403 para ambos os perfis públicos e 200 para administrador. Também verificam erro interno sanitizado, JSON inválido e ausência de acesso a `.env`.
 
 O teste de interface usa jsdom, carrega HTML/JS servido pelo Express e executa cadastro → login → minha conta → saída com Fetch HTTP real e banco simulado. Não é teste visual de navegador.
 
-**Pendente de execução:** criação real das tabelas, FKs/CHECK, transações e persistência MySQL. Não havia serviço MySQL acessível em 127.0.0.1:3306 (ECONNREFUSED), cliente MySQL ou Docker disponíveis. O teste de banco real está em `backend/tests/mysql.test.js`. Para executá-lo, com uma instância MySQL disponível e credenciais que possam criar um banco exclusivo, configure `DB_NAME=entrega_radar_test` e `RUN_MYSQL_TESTS=1` no ambiente do processo e execute `npm test`. O teste cria esse banco sem apagar tabelas existentes, insere dados de e-mail aleatório e remove seus registros no final. Nunca aponte esse teste ao banco de uso real. O restante dos testes não requer banco; execute sem RUN_MYSQL_TESTS para ignorá-lo.
+Na validação da Entrega 3 em 13/11/2026, a suíte foi executada em MySQL Community Server 8.4.13, em uma instância local isolada. O teste de banco real está em `backend/tests/mysql.test.js` e cobre o esquema, os vínculos, a autenticação e a persistência do CRUD. Para executá-lo, com uma instância MySQL disponível e credenciais que possam criar um banco exclusivo, configure `DB_NAME=entrega_radar_test` e `RUN_MYSQL_TESTS=1` no ambiente do processo e execute `npm test`. O teste cria esse banco sem apagar tabelas existentes, insere dados de e-mail aleatório e remove seus registros no final. Nunca aponte esse teste ao banco de uso real. O restante dos testes não requer banco; execute sem RUN_MYSQL_TESTS para ignorá-lo.
 
 Codex Security: revisão estática formal de 19 arquivos de backend/SQL do snapshot inicial, sem vulnerabilidades confirmadas; cobertura parcial, excluindo interface, testes, lockfile e alterações posteriores. Essa revisão não substitui execução do banco nem auditoria futura dos fluxos da Entrega 3.
 
@@ -256,15 +256,37 @@ Figma não foi necessário: não há referência visual fornecida nem redesign s
 
 Hospedagem futura: manter frontend/API na mesma origem, com processo Node.js/Express e MySQL em host privado. Frontend estático também pode ficar na Vercel, desde que se configure um proxy para a API ou CORS restrito à origem autorizada. A API poderia ser adaptada para Vercel Functions com MySQL externo, pool dimensionado e limites de execução verificados; MySQL não é instalado dentro da Function. Consulte [limites oficiais](https://vercel.com/docs/functions/limitations). A configuração atual é local e não pretende ser um deploy pronto. Orientações de arquitetura da skill Vercel consultadas, sem alteração em conta/projeto.
 
-## 9. Próximas entregas
+## 9. Entrega 3 — pedidos de materiais
 
-Entrega 3: CRUD de pedidos com permissões por organização, histórico e integração completa. Etapas posteriores: diretório funcional, solicitações/aceites, etapas de entrega, estimativas, alertas e avaliação das previsões. As tabelas desses fluxos estão preparadas, porém não há endpoints de negócio implementados. Não há IA, GPS, pagamentos ou serviços externos adicionados.
+Entre com uma conta de empresa contratante. Na área **Pedidos de materiais**, use **Novo pedido** para preencher material, fornecedor, origem, destino, quantidade, unidade e prazo combinado. O painel mostra a etapa atual e indica prazos vencidos. Os botões **Editar** e **Excluir** ficam disponíveis para pedidos aguardando confirmação.
 
-## 10. GitHub
+| Método | Rota | Resultado |
+| --- | --- | --- |
+| POST | `/api/pedidos` | Cadastra um pedido da empresa da sessão. Retorna 201 com ID e cabeçalho Location. |
+| GET | `/api/pedidos` | Lista os pedidos da empresa, ordenados por prazo e ID. |
+| GET | `/api/pedidos/:id` | Consulta um pedido da empresa. |
+| PUT | `/api/pedidos/:id` | Substitui os dados iniciais de um pedido aguardando confirmação. Retorna 204. |
+| DELETE | `/api/pedidos/:id` | Exclui um pedido aguardando confirmação e sem registros relacionados. Retorna 204. |
+
+Todas as rotas exigem JWT e perfil contratante. O servidor obtém a empresa da conta autenticada. Contas de transportadora ou de administração recebem 403. Para uma contratante, um ID de outra empresa retorna 404. As alterações em pedidos que avançaram de etapa retornam 409. A exclusão de pedidos vinculados a registros de transporte ou histórico também retorna 409.
+
+POST e PUT recebem os mesmos sete campos do formulário. A quantidade deve ser positiva, com até três casas decimais. Informe o prazo como `AAAA-MM-DD`. A API valida os campos e usa consultas parametrizadas. A criação sempre começa em `aguardando_confirmacao`. Nenhuma migração é necessária para instalações com o esquema da Entrega 2.
+
+O front-end usa Fetch e atualiza o DOM após cada operação. O aviso de prazo compara a data combinada ao dia atual do banco. Previsões baseadas no histórico, contratação de transporte e registro de etapas ficam para a entrega final.
+
+Para conferir as permissões, crie duas contas contratantes e uma conta de transportadora. Cadastre, edite e exclua um pedido com a primeira conta. Confira que a segunda vê apenas seus próprios pedidos e que a transportadora recebe 403 ao consultar a API de pedidos.
+
+Em 13/11/2026, a suíte passou com 6 testes e nenhuma falha, incluindo o teste com MySQL 8.4.13. A integração de interface foi exercitada com DOM simulado e requisições HTTP reais. A integração MySQL confirmou criação, leitura, edição e exclusão, prazos vencidos, isolamento entre empresas, bloqueio após mudança de etapa e preservação de pedidos com histórico vinculado.
+
+## 10. Próximas entregas
+
+Etapas posteriores ao CRUD de pedidos: diretório funcional, solicitações de transporte, registro de etapas, estimativas e avaliação das previsões. As tabelas de solicitação e histórico já fazem parte do esquema.
+
+## 11. GitHub
 
 As quatro entregas permanecem na mesma pasta e repositório. `.gitignore` exclui node_modules, .env e temporários. Versionados apenas fonte, SQL, lockfile, testes e documentação. Antes de registrar novos commits, revise `git status` e selecione somente `entrega-radar`.
 
-## 11. Acompanhamento do parecer da Entrega 1
+## 12. Acompanhamento do parecer da Entrega 1
 
 O professor atribuiu **PD - Plenamente Desenvolvido** aos quatro indicadores, considerando o estado de 30/10/2026 no commit `1872a43`. As orientações são manter commits descritivos, atualizar a documentação, preservar a separação de responsabilidades e validar as previsões com dados reais, comunicando suas limitações.
 
