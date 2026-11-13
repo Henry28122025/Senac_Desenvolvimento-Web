@@ -1,7 +1,13 @@
-const express = require('express');
-const router = express.Router();
+const router = require('express').Router();
+const autenticar = require('../middlewares/autenticacaoMiddleware');
+const autorizar = require('../middlewares/autorizacaoMiddleware');
+const pedidos = require('../controllers/pedidosControllers');
 
-// Entrega 1: rotas reservadas para CRUD dos pedidos de materiais.
-// Este router ainda não contém endpoints e não está ligado ao app.js.
+router.use(autenticar, autorizar('contratante'));
+router.get('/', pedidos.listar);
+router.post('/', pedidos.criar);
+router.get('/:id', pedidos.consultar);
+router.put('/:id', pedidos.atualizar);
+router.delete('/:id', pedidos.excluir);
 
 module.exports = router;
