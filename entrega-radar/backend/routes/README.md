@@ -8,5 +8,6 @@ As rotas associam método e caminho ao controller e aplicam os middlewares neces
 | `authRoutes.js` | `POST /api/auth/cadastro` e `POST /api/auth/login` | Validação no backend e limite de tentativas. |
 | `usuariosRoutes.js` | `GET /api/usuarios/me` | JWT válido e usuário ativo no banco. |
 | `adminRoutes.js` | `GET /api/admin/painel` | JWT válido, usuário ativo e perfil administrador. |
+| `pedidosRoutes.js` | `GET /api/pedidos`, `POST /api/pedidos`, `GET /api/pedidos/:id`, `PUT /api/pedidos/:id`, `DELETE /api/pedidos/:id` | JWT válido, perfil contratante e vínculo com a empresa do pedido. |
 
-Os outros routers são arquivos reservados e não estão conectados ao `app.js`. Não há CRUD de pedidos ou cálculo de previsões nesta etapa. Ao implementar uma rota de negócio, atualizar este arquivo, o README principal e os testes correspondentes no mesmo commit.
+O controller de pedidos usa o vínculo da sessão para acessar somente pedidos da própria empresa. Ao implementar uma rota de negócio, atualize esta documentação, o README principal e os testes correspondentes.
