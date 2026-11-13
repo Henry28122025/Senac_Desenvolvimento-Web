@@ -3,19 +3,16 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>EntregaRadar — Acesso</title>
+        <title>EntregaRadar</title>
         <link rel="stylesheet" href="css/style.css" />
         <script src="js/script.js" defer></script>
     </head>
     <body>
         <main>
-            <p class="etapa">PROJETO WEB / ENTREGA 2</p>
+            <p class="etapa">PROJETO WEB / ENTREGA 3</p>
             <h1>EntregaRadar</h1>
-            <p>
-                Acompanhe materiais e conecte sua empresa a transportadoras. Nesta etapa: cadastro e
-                acesso à conta.
-            </p>
-            <nav aria-label="Acesso">
+            <p>Cadastre e acompanhe os pedidos de materiais da sua empresa.</p>
+            <nav id="acesso" aria-label="Acesso">
                 <button type="button" id="abrir-login">Entrar</button>
                 <button type="button" id="abrir-cadastro">Criar conta</button>
             </nav>
@@ -108,7 +105,52 @@
                 <p id="dados"></p>
                 <button type="button" id="admin" hidden>Verificar acesso administrativo</button>
                 <button type="button" id="sair">Sair</button>
-                <p>Pedidos, diretório e previsões serão disponibilizados nas próximas entregas.</p>
+                <section id="pedidos" aria-labelledby="titulo-pedidos" hidden>
+                    <h2 id="titulo-pedidos">Pedidos de materiais</h2>
+                    <p id="pedidos-status" role="status" aria-live="polite"></p>
+                    <button type="button" id="novo-pedido">Novo pedido</button>
+                    <button type="button" id="recarregar-pedidos">Atualizar lista</button>
+                    <form id="pedido-form" hidden>
+                        <h3 id="pedido-titulo">Novo pedido</h3>
+                        <div class="campos-pedido">
+                            <label
+                                >Material<input name="material" maxlength="150" required
+                            /></label>
+                            <label
+                                >Fornecedor<input name="fornecedor" maxlength="150" required
+                            /></label>
+                            <label>Origem<input name="origem" maxlength="255" required /></label>
+                            <label>Destino<input name="destino" maxlength="255" required /></label>
+                            <label
+                                >Quantidade<input
+                                    name="quantidade"
+                                    type="number"
+                                    min="0.001"
+                                    max="999999999.999"
+                                    step="0.001"
+                                    required
+                            /></label>
+                            <label
+                                >Unidade<input
+                                    name="unidade"
+                                    maxlength="20"
+                                    placeholder="Ex.: kg"
+                                    required
+                            /></label>
+                            <label
+                                >Prazo combinado<input
+                                    name="prazo_combinado"
+                                    type="date"
+                                    min="1000-01-01"
+                                    max="9999-12-31"
+                                    required
+                            /></label>
+                        </div>
+                        <button type="submit">Salvar pedido</button>
+                        <button type="button" id="fechar-pedido">Fechar formulário</button>
+                    </form>
+                    <ul id="pedidos-lista" aria-label="Pedidos cadastrados"></ul>
+                </section>
             </section>
             <footer>Henry Matheus da Silveira / Trabalho individual</footer>
         </main>
