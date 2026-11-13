@@ -22,8 +22,6 @@ Não reescrever o histórico para simular progresso. Exemplos fictícios e teste
 
 ## Pendências técnicas já conhecidas
 
-- Executar o esquema e a suíte de integração com MySQL real disponível e configurado.
-- Implementar o CRUD e as permissões por organização na Entrega 3.
 - Implementar os fluxos de transporte, registros das previsões e validação histórica nas etapas posteriores.
 
-Essas pendências não são apontamentos de reprovação da Entrega 1: são o estado atual do desenvolvimento.
+Em 13/11/2026, a Entrega 3 implementou o CRUD de pedidos e as permissões por organização. Os testes de esquema, autenticação e CRUD passaram em uma instância isolada do MySQL 8.4.13.
