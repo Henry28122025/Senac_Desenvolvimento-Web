@@ -17,6 +17,7 @@ app.use('/api', require('./routes/inicioRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/usuarios', require('./routes/usuariosRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
+app.use('/api/pedidos', require('./routes/pedidosRoutes'));
 app.use(express.static(path.join(__dirname, '../frontend')));
 app.use((req, res) => res.status(404).json({ mensagem: 'Rota não encontrada.' }));
 app.use(require('./middlewares/errosMiddleware').tratarErro);
