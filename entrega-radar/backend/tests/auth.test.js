@@ -9,6 +9,20 @@ const config = require('../config');
 const { hashSenha, verificarSenha } = require('../services/senhas');
 const users = [];
 const orgs = [];
+const pedidos = [];
+const camposPedido = [
+    'material',
+    'fornecedor',
+    'origem',
+    'destino',
+    'quantidade',
+    'unidade',
+    'prazo_combinado'
+];
+
+function dadosPedido(values) {
+    return Object.fromEntries(camposPedido.map((campo, i) => [campo, values[i]]));
+}
 let rollback = 0;
 const execute = async (sql, values) => {
     if (sql.startsWith('INSERT INTO empresas') || sql.startsWith('INSERT INTO transportadoras')) {
@@ -32,6 +46,35 @@ const execute = async (sql, values) => {
         users.push(u);
         return [{ insertId: u.id }];
     }
+    if (sql.startsWith('INSERT INTO pedidos')) {
+        const id = pedidos.length + 1;
+        pedidos.push({
+            id,
+            empresa_id: values[0],
+            etapa: 'aguardando_confirmacao',
+            ...dadosPedido(values.slice(1))
+        });
+        return [{ insertId: id }];
+    }
+    if (sql.startsWith('SELECT') && sql.includes('FROM pedidos WHERE')) {
+        assert.match(sql, /empresa_id = \?/);
+        return [
+            pedidos.filter((pedido) =>
+                values.length === 1
+                    ? pedido.empresa_id === values[0]
+                    : pedido.id === values[0] && pedido.empresa_id === values[1]
+            )
+        ];
+    }
+    if (sql.startsWith('UPDATE pedidos') || sql.startsWith('DELETE FROM pedidos')) {
+        assert.match(sql, /WHERE id = \? AND empresa_id = \?/);
+        const [id, empresa] = values.slice(-2);
+        const i = pedidos.findIndex((pedido) => pedido.id === id && pedido.empresa_id === empresa);
+        assert.notEqual(i, -1);
+        if (sql.startsWith('UPDATE')) Object.assign(pedidos[i], dadosPedido(values));
+        else pedidos.splice(i, 1);
+        return [{ affectedRows: 1 }];
+    }
     if (sql.includes('WHERE email = ?')) return [users.filter((u) => u.email === values[0])];
     if (sql.includes('WHERE id = ?'))
         return [
@@ -42,16 +85,21 @@ const execute = async (sql, values) => {
     throw new Error('SQL inesperado');
 };
 pool.execute = execute;
-pool.getConnection = async () => ({
-    execute,
-    beginTransaction: async () => {},
-    commit: async () => {},
-    rollback: async () => {
-        rollback++;
-        orgs.pop();
-    },
-    release() {}
-});
+pool.getConnection = async () => {
+    const quantidadeOrganizacoes = orgs.length;
+    const quantidadeUsuarios = users.length;
+    return {
+        execute,
+        beginTransaction: async () => {},
+        commit: async () => {},
+        rollback: async () => {
+            rollback++;
+            orgs.length = quantidadeOrganizacoes;
+            users.length = quantidadeUsuarios;
+        },
+        release() {}
+    };
+};
 const app = require('../app');
 const d = {
     nome: 'Pessoa Teste',
@@ -196,7 +244,61 @@ test('hash com salt aleatório e erros/arquivos estáticos', async () => {
     assert(!JSON.stringify(e.body).includes('privadas'));
     pool.execute = orig;
 });
-test('DOM + Fetch: cadastro, login, conta, permissão e saída com API real e banco simulado', async () => {
+test('API de pedidos aplica autenticação, perfil, empresa, validações e etapa', async () => {
+    const auth = (id) =>
+        'Bearer ' +
+        jwt.sign({}, config.secret, {
+            subject: String(id),
+            audience: config.audience,
+            issuer: config.issuer,
+            expiresIn: 60
+        });
+    users.push({ id: 101, ativo: 1, perfil: 'contratante', empresa_id: 101 });
+    const dados = {
+        material: 'Aço',
+        fornecedor: 'Fornecedor',
+        origem: 'Porto Alegre',
+        destino: 'Santa Cruz do Sul',
+        quantidade: '2.500',
+        unidade: 'kg',
+        prazo_combinado: '2026-11-20'
+    };
+    const rota = '/api/pedidos';
+    await request(app).get(rota).expect(401);
+    for (const id of [2, 99])
+        await request(app).get(rota).set('Authorization', auth(id)).expect(403);
+    for (const invalido of [
+        { empresa_id: 101 },
+        { quantidade: '1.0001' },
+        { prazo_combinado: '2026-02-30' },
+        { quantidade: 0 },
+        { etapa: 'entregue' }
+    ])
+        await request(app)
+            .post(rota)
+            .set('Authorization', auth(1))
+            .send({ ...dados, ...invalido })
+            .expect(400);
+    const criado = await request(app)
+        .post(rota)
+        .set('Authorization', auth(1))
+        .send(dados)
+        .expect(201);
+    const url = rota + '/' + criado.body.id;
+    assert.equal(criado.headers.location, url);
+    const lista = await request(app).get(rota).set('Authorization', auth(101)).expect(200);
+    assert.deepEqual(lista.body.pedidos, []);
+    await request(app).get(url).set('Authorization', auth(101)).expect(404);
+    await request(app).put(url).set('Authorization', auth(101)).send(dados).expect(404);
+    await request(app).delete(url).set('Authorization', auth(101)).expect(404);
+    pedidos[0].etapa = 'em_transporte';
+    await request(app).put(url).set('Authorization', auth(1)).send(dados).expect(409);
+    await request(app).delete(url).set('Authorization', auth(1)).expect(409);
+    pedidos[0].etapa = 'aguardando_confirmacao';
+    await request(app).delete(url).set('Authorization', auth(1)).expect(204);
+});
+
+test('DOM + Fetch: cadastro, login, CRUD de pedidos e saída com API real e banco simulado', async () => {
     const { JSDOM } = require('jsdom');
     const server = app.listen(0, '127.0.0.1');
     await new Promise((r) => server.once('listening', r));
@@ -238,6 +340,35 @@ test('DOM + Fetch: cadastro, login, conta, permissão e saída com API real e ba
         assert(el('dados').textContent.includes('dom@example.test'));
         assert.equal(el('admin').hidden, true);
         assert.equal(dom.window.localStorage.length, 0);
+        await wait(() => el('pedidos-status').textContent === 'Nenhum pedido cadastrado.');
+        el('novo-pedido').click();
+        const form = el('pedido-form');
+        for (const [campo, valor] of Object.entries({
+            material: 'Tubo',
+            fornecedor: 'Fornecedor',
+            origem: 'Porto Alegre',
+            destino: 'Santa Cruz do Sul',
+            quantidade: '4',
+            unidade: 'un',
+            prazo_combinado: '2026-11-23'
+        }))
+            form.elements.namedItem(campo).value = valor;
+        const salvar = () =>
+            form.dispatchEvent(new dom.window.Event('submit', { cancelable: true }));
+        salvar();
+        await wait(() => el('pedidos-lista').textContent.includes('Tubo'));
+        el('pedidos-lista').querySelector('button').click();
+        await wait(() => !form.hidden && form.elements.namedItem('material').value === 'Tubo');
+        form.elements.namedItem('material').value = 'Tubo galvanizado';
+        salvar();
+        await wait(() => el('pedidos-lista').textContent.includes('Tubo galvanizado'));
+        dom.window.confirm = () => true;
+        const excluir = [...el('pedidos-lista').querySelectorAll('button')].find(
+            (button) => button.textContent === 'Excluir'
+        );
+        excluir.click();
+        await wait(() => el('pedidos-status').textContent === 'Pedido excluído.');
+        assert.equal(el('pedidos-lista').children.length, 0);
         el('sair').click();
         assert.equal(el('login').hidden, false);
         assert.equal(el('dados').textContent, '');
