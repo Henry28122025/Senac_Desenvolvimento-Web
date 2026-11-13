@@ -94,3 +94,36 @@ button:disabled {
         font-size: 30px;
     }
 }
+
+.campos-pedido {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    column-gap: 16px;
+}
+
+#pedidos-lista {
+    display: grid;
+    gap: 12px;
+    padding: 0;
+    list-style: none;
+}
+
+#pedidos-lista li {
+    padding: 16px;
+    border: 1px solid #d8e0ea;
+    border-radius: 6px;
+    overflow-wrap: anywhere;
+}
+
+#pedidos-lista h3,
+#pedidos-lista p {
+    margin: 0 0 6px;
+}
+
+#pedidos button {
+    margin-right: 8px;
+}
+
+.alerta-pedido {
+    color: #a02e26;
+}
